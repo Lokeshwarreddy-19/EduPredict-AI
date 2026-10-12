@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f8fc">
+  <meta name="description" content="A private, Ollama-powered study coach that assesses semester readiness and creates a personalized improvement plan.">
+  <title>EduPredict AI — Your personal study coach</title>
+
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="EduPredict AI home">
+        <span class="brand-mark" aria-hidden="true">E<span>.</span></span>
+        <span class="brand-name">edu<span>predict</span><small>YOUR PERSONAL STUDY COACH</small></span>
+      </a>
+
+      <div class="sidebar-label">WORKSPACE</div>
+      <button class="nav-link active" type="button" data-view="assessment">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M8 5h12M8 12h12M8 19h12M4 5h.01M4 12h.01M4 19h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        New assessment
+      </button>
+      <button class="nav-link" type="button" data-view="report">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M4 19V5m0 14h16M8 15l4-4 3 2 5-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Performance report
+      </button>
+
+      <div class="sidebar-spacer"></div>
+      <div class="privacy-card">
+        <span class="privacy-icon" aria-hidden="true">◈</span>
+        <strong>Your data stays yours.</strong>
+        <p>Assessment happens right here. AI advice runs on your own computer.</p>
+        <span class="privacy-status"><span class="status-dot"></span> PRIVATE &amp; LOCAL</span>
+      </div>
+      <div class="sidebar-footer"><span class="brand-mark footer-mark">E<span>.</span></span> EduPredict AI <span>·</span> built for your next best</div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb-current">New assessment</strong></div>
+        <div class="topbar-actions">
+          <div class="model-control">
+            <span class="model-dot" id="model-dot"></span>
+            <label for="model-select" class="visually-hidden">Local AI model</label>
+            <select id="model-select" aria-label="Local AI model">
+              <option value="llama3.2:latest">llama3.2</option>
+              <option value="qwen3:4b">qwen3:4b</option>
+            </select>
+            <span class="model-status" id="model-status">Connecting…</span>
+          </div>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle theme">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M20.2 15.4A8.5 8.5 0 0 1 8.6 3.8 8.5 8.5 0 1 0 20.2 15.4Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="avatar" aria-label="Student profile">S</div>
+        </div>
+      </header>
+
+      <div class="page-content" id="assessment-view">
+        <section class="welcome-banner">
+          <div>
+            <span class="eyebrow"><span class="sparkle" aria-hidden="true">✳</span> YOUR NEXT SEMESTER STARTS HERE</span>
+            <h1>Small steps. <span>Stronger semesters.</span></h1>
+            <p>A thoughtful check-in today. A clearer plan for what comes next.</p>
+          </div>
+          <div class="banner-art" aria-hidden="true">
+            <span class="art-orbit orbit-one"></span><span class="art-orbit orbit-two"></span>
+            <span class="art-star">✳</span><span class="art-circle"><span>✦</span></span>
+            <span class="art-spark spark-one">✳</span><span class="art-spark spark-two">·</span>
+          </div>
+        </section>
+
+        <section class="workspace-grid" aria-label="Student performance assessment">
+          <article class="chat-card">
+            <div class="chat-header">
+              <div class="coach-identity">
+                <span class="coach-avatar"><span>e</span><i></i></span>
+                <span><strong>Your study coach</strong><small><span class="status-dot"></span> Here to help, no judgment</small></span>
+              </div>
+              <span class="session-label"><span class="lock-icon" aria-hidden="true">▣</span> PRIVATE SESSION</span>
+            </div>
+            <div class="progress-section">
+              <div class="progress-copy"><span id="progress-label">LET’S GET TO KNOW YOU</span><span id="progress-count">01 <span>/ 15</span></span></div>
+              <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+            </div>
+            <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+            <div class="chat-bottom-note"><span aria-hidden="true">✧</span> Your answers are private and stay on this device.</div>
+          </article>
+
+          <aside class="insights-column">
+            <section class="insight-card readiness-card">
+              <div class="card-heading"><span>YOUR READINESS</span><span class="heading-icon" aria-hidden="true">↗</span></div>
+              <div class="readiness-empty" id="readiness-empty">
+                <div class="readiness-illustration" aria-hidden="true"><span class="mini-star">✳</span><span class="mini-book">▤</span><span class="mini-dot"></span></div>
+                <strong>Your progress, at a glance.</strong>
+                <p>Answer a few thoughtful questions and your personalized picture will take shape here.</p>
+              </div>
+              <div class="readiness-result hidden" id="readiness-result">
+                <div class="score-ring" id="score-ring"><div><strong id="score-value">0</strong><span>OUT OF 100</span></div></div>
+                <div class="score-caption"><strong id="score-status">Looking good</strong><span>Performance score</span></div>
+                <div class="readiness-metrics">
+                  <div><span>Pass likelihood</span><strong id="sidebar-pass">—</strong></div>
+                  <div><span>Predicted CGPA</span><strong id="sidebar-cgpa">—</strong></div>
+                  <div><span>Risk level</span><strong id="sidebar-risk">—</strong></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="insight-card pulse-card">
+              <div class="card-heading"><span>THE STUDY PULSE</span><span class="pulse-tag" id="pulse-tag">GETTING READY</span></div>
+              <div class="pulse-chart" aria-label="Study readiness factors">
+                <div class="chart-y-labels"><span>STRONG</span><span>BUILDING</span><span>FOCUS AREA</span></div>
+                <div class="chart-grid">
+                  <div class="grid-line"></div><div class="grid-line"></div><div class="grid-line"></div>
+                  <div class="chart-bars">
+                    <div class="bar-column"><div class="bar-track"><div class="bar-fill bar-blue" id="bar-attendance"></div></div><span>Attendance</span></div>
+                    <div class="bar-column"><div class="bar-track"><div class="bar-fill bar-lilac" id="bar-study"></div></div><span>Study time</span></div>
+                    <div class="bar-column"><div class="bar-track"><div class="bar-fill bar-mint" id="bar-academics"></div></div><span>Academics</span></div>
+                    <div class="bar-column"><div class="bar-track"><div class="bar-fill bar-peach" id="bar-habits"></div></div><span>Study habits</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pulse-caption" id="pulse-caption"><span class="caption-dot"></span> Your personal overview appears after your check-in.</div>
+            </section>
+
+            <section class="encouragement-card">
+              <span class="encouragement-spark" aria-hidden="true">✳</span>
+              <p>Progress isn’t always a straight line.</p>
+              <span>A good place to begin is right here.</span>
+            </section>
+          </aside>
+        </section>
+
+        <section class="full-report hidden" id="full-report" aria-live="polite"></section>
+        <footer class="page-footer"><span>EduPredict AI</span> is a study-planning tool, not a guarantee of academic results.</footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
